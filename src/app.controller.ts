@@ -1,4 +1,4 @@
-import { Controller, Get, Req, Res, Post, Header } from '@nestjs/common';
+import { Controller, Req, Res, Post } from '@nestjs/common';
 import { HasuraService } from './hasura/hasura.service';
 const util = require('util');
 import { Request, Response } from 'express';
@@ -12,9 +12,9 @@ export class AppController {
     @Req() req: Request,
     @Res() res: Response,
   ): Promise<any> {
-    console.log('DEBUG validateAndAddDirectMessageChannel', req.body);
+    console.log('DEBUG validateAndAddDirectMessageChannel', req.body.input);
     // get request input
-    const { name, user_id1, user_id2 } = req.body['input'];
+    const { name, user_id1, user_id2 } = req.body.input;
 
     const {
       data: checkData,
@@ -36,7 +36,9 @@ export class AppController {
     }
 
     if (checkData?.data?.channel.length >= 1) {
-      console.error('Users have already subscribed');
+      console.error(
+        'Users have already subscribed to a direct message channel.',
+      );
       return res.json({ affected_rows: 0 });
     }
 
@@ -77,10 +79,10 @@ export class AppController {
   ): Promise<any> {
     // get request input
 
-    console.log('DEBUG addChannelUser', req.body);
+    console.log('DEBUG addChannelUser', req.body.input);
 
     // get request input
-    const { user_id, channel_id } = req.body['input'];
+    const { user_id, channel_id } = req.body.input;
 
     // run some business logic
 
@@ -105,17 +107,25 @@ export class AppController {
       return res['status'](400).json(checkErrors[0]);
     }
 
-    if (
-      checkData?.data?.channel[0]?.channel_type !== 'CHAT_MESSAGE' ||
-      checkData?.data?.channel[0]?.is_private !== true
-    ) {
-      if (checkData?.data?.channel[0]?.is_private !== true)
-        console.log('you cant add users to a public channel!');
-      if (checkData?.data?.channel[0]?.channel_type !== 'CHAT_MESSAGE')
-        console.log(
-          'wrong channel type: ',
-          checkData?.data?.channel[0]?.channel_type,
-        );
+    if (checkData?.data?.channel[0]?.channel_type !== 'CHAT_MESSAGE') {
+      console.log(
+        'wrong channel type: ',
+        checkData?.data?.channel[0]?.channel_type,
+      );
+      return res.json({ affected_rows: 0 });
+    }
+
+    if (checkData?.data?.channel[0]?.is_private !== true) {
+      console.log('you cant add users to a public channel!');
+
+      return res.json({ affected_rows: 0 });
+    }
+
+    if (checkData?.data?.channel[0]?.owner_id === user_id) {
+      console.log(
+        'you cant add yourself to a private channel, because you are the owner of the private channel',
+      );
+
       return res.json({ affected_rows: 0 });
     }
 
@@ -140,14 +150,12 @@ export class AppController {
       return res.json({ affected_rows: 0 });
     }
 
-    // if (errors) {
-    //   return res.status(400).json(errors[0]);
-    // }
-
-    // success
+    if (data.errors) {
+      console.error(data.errors[0]);
+      return res.status(400).json(data.errors[0]);
+    }
 
     console.log('success', data);
-    console.log('errors', errors);
 
     return res.json({
       ...data?.data?.insert_user_channels,

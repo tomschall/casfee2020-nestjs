@@ -65,7 +65,16 @@ query getChannelType($id: Int! = 11) {
 
 @Injectable()
 export class HasuraService {
-  constructor(private httpService: HttpService) {}
+  config: Object;
+
+  constructor(private httpService: HttpService) {
+    this.config = {
+      headers: {
+        'content-type': 'application/json',
+        'x-hasura-admin-secret': 'supersecret',
+      },
+    };
+  }
 
   async addDirectMessageChannel(variables): Promise<any> {
     return this.httpService
@@ -75,13 +84,7 @@ export class HasuraService {
           query: HASURA_DIRECT_MESSAGE_OPERATION,
           variables,
         }),
-        {
-          method: 'POST',
-          headers: {
-            'content-type': 'application/json',
-            'x-hasura-admin-secret': 'supersecret',
-          },
-        },
+        this.config,
       )
       .toPromise();
   }
@@ -94,13 +97,7 @@ export class HasuraService {
           query: HASURA_CHECK_DIRECT_MESSAGE,
           variables,
         }),
-        {
-          method: 'POST',
-          headers: {
-            'content-type': 'application/json',
-            'x-hasura-admin-secret': 'supersecret',
-          },
-        },
+        this.config,
       )
       .toPromise();
   }
@@ -113,12 +110,7 @@ export class HasuraService {
           query: HASURA_CHAT_MESSAGE_OPERATION,
           variables,
         }),
-        {
-          headers: {
-            'content-type': 'application/json',
-            'x-hasura-admin-secret': 'supersecret',
-          },
-        },
+        this.config,
       )
       .toPromise();
   }
@@ -131,12 +123,7 @@ export class HasuraService {
           query: HASURA_GET_CHANNEL_TYPE,
           variables,
         }),
-        {
-          headers: {
-            'content-type': 'application/json',
-            'x-hasura-admin-secret': 'supersecret',
-          },
-        },
+        this.config,
       )
       .toPromise();
   }
