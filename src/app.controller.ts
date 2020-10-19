@@ -1,7 +1,7 @@
 import { Controller, Req, Res, Post } from '@nestjs/common';
 import { HasuraService } from './hasura/hasura.service';
-const util = require('util');
 import { Request, Response } from 'express';
+const util = require('util');
 
 @Controller()
 export class AppController {
@@ -64,11 +64,11 @@ export class AppController {
       return res.status(400).json(errors[0]);
     }
 
-    console.log('data end', data);
+    console.log('data end', data.data.insert_channel.returning[0]);
 
     // success
     return res.json({
-      ...data.data.insert_channel,
+      ...data.data.insert_channel.returning[0],
     });
   }
 

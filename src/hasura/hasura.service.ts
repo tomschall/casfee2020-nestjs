@@ -1,5 +1,4 @@
 import { Injectable, HttpService } from '@nestjs/common';
-const util = require('util');
 
 const HASURA_DIRECT_MESSAGE_OPERATION = `
 mutation addDirectMessageChannel(
@@ -17,7 +16,10 @@ mutation addDirectMessageChannel(
       user_channels: { data: [{ user_id: $user_id1 }, { user_id: $user_id2 }] }
     }
   ) {
-    affected_rows
+    returning {
+      id
+      name
+    }
   }
 }
 `;
