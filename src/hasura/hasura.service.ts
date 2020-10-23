@@ -65,9 +65,16 @@ query getChannelType($id: Int! = 11) {
   }
 }`;
 
+interface HeadersDefinition {
+  headers: {
+    'content-type': string;
+    'x-hasura-admin-secret': string;
+  };
+}
+
 @Injectable()
 export class HasuraService {
-  config: Object;
+  config: HeadersDefinition;
 
   constructor(private httpService: HttpService) {
     this.config = {

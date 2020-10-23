@@ -25,7 +25,7 @@ export class AppController {
     });
 
     if (checkErrors) {
-      return res['status'](400).json(checkErrors[0]);
+      return res.status(400).json(checkErrors[0]);
     }
 
     console.log('checkData: ', util.inspect(checkData, false, null, true));
@@ -47,7 +47,7 @@ export class AppController {
       util.inspect(checkData.data, false, null, true),
     );
 
-    //execute the Hasura operation
+    // execute the Hasura operation
     const {
       data,
       errors,
@@ -104,7 +104,7 @@ export class AppController {
     );
 
     if (checkErrors) {
-      return res['status'](400).json(checkErrors[0]);
+      return res.status(400).json(checkErrors[0]);
     }
 
     if (checkData?.data?.channel[0]?.channel_type !== 'CHAT_MESSAGE') {
