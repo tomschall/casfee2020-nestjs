@@ -5,12 +5,6 @@
 
 # dependencies
 /node_modules
-/.pnp
-.pnp.js
-
-# generated
-src/api/generated/graphql.tsx
-graphql.schema.json
 
 # testing
 /coverage
