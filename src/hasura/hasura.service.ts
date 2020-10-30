@@ -88,7 +88,7 @@ export class HasuraService {
   async addDirectMessageChannel(variables): Promise<any> {
     return this.httpService
       .post(
-        'http://localhost:8080/v1/graphql',
+        'http://host.docker.internal:8080/v1/graphql',
         JSON.stringify({
           query: HASURA_DIRECT_MESSAGE_OPERATION,
           variables,
@@ -101,7 +101,7 @@ export class HasuraService {
   async getCheckIfUserHasSubscribedToChannel(variables): Promise<any> {
     return this.httpService
       .post(
-        'http://localhost:8080/v1/graphql',
+        'http://host.docker.internal:8080/v1/graphql',
         JSON.stringify({
           query: HASURA_CHECK_DIRECT_MESSAGE,
           variables,
@@ -114,7 +114,7 @@ export class HasuraService {
   async addChannelUserSubscription(variables): Promise<any> {
     return this.httpService
       .post(
-        'http://localhost:8080/v1/graphql',
+        'http://host.docker.internal:8080/v1/graphql',
         JSON.stringify({
           query: HASURA_CHAT_MESSAGE_OPERATION,
           variables,
@@ -127,7 +127,7 @@ export class HasuraService {
   async getChannelType(variables): Promise<any> {
     return this.httpService
       .post(
-        'http://localhost:8080/v1/graphql',
+        'http://host.docker.internal:8080/v1/graphql',
         JSON.stringify({
           query: HASURA_GET_CHANNEL_TYPE,
           variables,
