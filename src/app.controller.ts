@@ -1,4 +1,4 @@
-import { Controller, Req, Res, Post } from '@nestjs/common';
+import { Controller, Req, Res, Post, Get } from '@nestjs/common';
 import { HasuraService } from './hasura/hasura.service';
 import { Request, Response } from 'express';
 const util = require('util');
@@ -6,6 +6,14 @@ const util = require('util');
 @Controller()
 export class AppController {
   constructor(private readonly hasuraService: HasuraService) {}
+
+  @Get('test')
+  async test(
+    @Req() req: Request,
+    @Res() res: Response,
+  ): Promise<any> {
+    console.log('test');
+  }
 
   @Post('validateAndAddDirectMessageChannel')
   async validateAndAddDirectMessageChannel(
